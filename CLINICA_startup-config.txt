@@ -1,0 +1,109 @@
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname CLINICA
+!
+!
+!
+enable secret 5 $1$mERr$9cTjUIEqNGurQiFU.ZeCi1
+!
+!
+!
+!
+!
+!
+no ip cef
+no ipv6 cef
+!
+!
+!
+!
+license udi pid CISCO1941/K9 sn FTX1524F590
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ ip address 192.168.0.1 255.255.255.240
+ ip helper-address 171.169.67.22
+ ip access-group CLINICA out
+ ip nat inside
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ ip address 171.169.67.1 255.255.255.252
+ ip nat outside
+!
+interface Serial0/0/1
+ ip address 171.169.67.5 255.255.255.252
+ no cdp enable
+ clock rate 128000
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router eigrp 1
+ network 171.169.67.0 0.0.0.3
+ network 171.169.67.4 0.0.0.3
+!
+router rip
+ version 2
+ no auto-summary
+!
+ip nat inside source list 1 interface Serial0/0/0 overload
+ip classless
+ip route 171.169.67.16 255.255.255.240 Serial0/0/0 
+!
+ip flow-export version 9
+!
+!
+access-list 1 permit 192.168.0.0 0.0.0.15
+ip access-list standard CLINICA
+ permit 171.169.67.16 0.0.0.15
+ permit 171.169.67.0 0.0.0.3
+!
+!
+!
+!
+!
+logging 171.169.67.22
+line con 0
+ password 7 0822455D0A16
+ logging synchronous
+ login
+!
+line aux 0
+!
+line vty 0 4
+ password 7 0822455D0A16
+ login
+!
+!
+ntp server 171.169.67.22 key 0
+!
+end
+

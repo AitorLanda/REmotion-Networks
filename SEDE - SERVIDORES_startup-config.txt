@@ -1,0 +1,107 @@
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname SERVIDORES
+!
+!
+!
+enable secret 5 $1$mERr$9cTjUIEqNGurQiFU.ZeCi1
+!
+!
+!
+!
+!
+!
+no ip cef
+no ipv6 cef
+!
+!
+!
+!
+license udi pid CISCO1941/K9 sn FTX1524ZD7Q
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ ip address 192.168.0.17 255.255.255.0
+ ip nat inside
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ ip address 171.169.67.2 255.255.255.252
+ ip helper-address 171.169.67.22
+ ip nat outside
+ clock rate 128000
+!
+interface Serial0/0/1
+ ip address 171.168.67.9 255.255.255.252
+ ip nat outside
+ no cdp enable
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router eigrp 1
+ network 171.169.67.8 0.0.0.3
+ network 171.169.67.0 0.0.0.3
+!
+router rip
+ version 2
+ no auto-summary
+!
+ip nat inside source static 192.168.0.26 171.169.67.22 
+ip classless
+!
+ip flow-export version 9
+!
+!
+!
+banner motd 
+Prohibida la entrada a toda persona ajena a la empresa
+!
+!
+!
+!
+logging 192.168.0.26
+logging 171.169.67.22
+line con 0
+ password 7 0822455D0A16
+ logging synchronous
+ login
+!
+line aux 0
+!
+line vty 0 4
+ password 7 0822455D0A16
+ login
+!
+!
+ntp server 171.169.67.22 key 0
+!
+end
+
